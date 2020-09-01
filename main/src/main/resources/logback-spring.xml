@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration debug="false" scan="true" scanPeriod="60 seconds" >
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <property name="LOG_HOME" value="main/target/log" />
+    <property name="LOG_NAME" value="mybatis-plus" />
+
+    <property name="CONSOLE_LOG_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss} ${PID:- } %clr(%-5p) | %clr(%-40.40logger{39}){cyan} %clr(%4L){magenta} | %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
+    <property name="FILE_LOG_PATTERN" value="%date [%level] [%thread] %logger{60} [%file : %line] %msg%n"/>
+
+    <!-- Console -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>${CONSOLE_LOG_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <!-- File -->
+    <appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <File>${LOG_HOME}/${LOG_NAME}.log</File>
+        <encoder>
+            <pattern>${FILE_LOG_PATTERN}</pattern>
+            <charset class="java.nio.charset.Charset">UTF-8</charset>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_HOME}/${LOG_NAME}.%d{yyyy-MM-dd}</fileNamePattern>
+            <maxHistory>15</maxHistory>
+        </rollingPolicy>
+    </appender>
+
+    <!-- Async File -->
+    <appender name="ASYNC-FILE" class="ch.qos.logback.classic.AsyncAppender">
+        <discardingThreshold>0</discardingThreshold>
+        <queueSize>256</queueSize>
+        <appender-ref ref="FILE"/>
+    </appender>
+
+    <logger name="priv.wmc.mapper" level="debug"/>
+
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+        <appender-ref ref="ASYNC-FILE"/>
+    </root>
+
+</configuration>
